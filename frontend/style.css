@@ -1,0 +1,374 @@
+:root {
+    --color-current-student-box: #7abfff;
+    --color-error-container: #FFCCCC;
+    --color-error-container-border: rgb(230, 68, 68);
+
+    --color-table-main-back: #fff;
+    --color-table-background: #efefef;
+    --color-table-selected-row: #DEE2E6;
+
+    --color-button-accept: rgb(59, 172, 59);
+    --color-button-delete: rgb(230, 68, 68);
+    --color-button-default: rgb(68, 82, 230);
+    --color-button-disable: #ddd;
+    --color-button-font-default: white;
+    --color-button-font-disable: #777;
+
+    --color-student-info-back: #efefef;
+    --color-student-info-border: rgb(151, 151, 151);
+
+    --color-header-background: rgb(255 255 255 / 80%);
+    --color-page-info-background: rgb(255 255 255 / 80%);
+
+    --color-filter-sort-panel: #f3f3f3;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 1.125rem;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+h1 {
+    width: fit-content;
+    margin: 0.5rem auto 1.5rem;
+    padding: 0.25em 0.7em;
+    background: var(--color-header-background);
+    border-radius: 0.5rem;
+}
+
+h1, 
+h4 {
+    text-align: center;
+    font-weight: 700;
+}
+
+h4 {
+    width: fit-content;
+    text-align: center;
+    margin: 1.25rem auto;
+    padding: 0.625rem 0.625rem;
+    background-color: var(--color-current-student-box);
+    border: 1px solid black;
+    border-radius: 0.625rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* таблица на главной странице */
+
+
+.table-container {
+    width: calc(100% - 2rem);
+    max-width: 60rem;
+    overflow-x: auto;
+    margin: 0 auto;
+	margin-bottom: 1.25rem;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table th {
+	font-weight: bold;
+	background: var(--color-table-background);
+	border: 1px solid black;
+    padding: 0.3125rem;
+}
+
+.table td {
+	border: 1px solid black;
+	padding: 0.3125rem;
+    background-color: var(--color-table-main-back);
+}
+
+.table .selected td {
+    background-color: var(--color-table-selected-row);
+}
+
+#title-for-blind {
+    visibility: hidden;
+}
+
+/* Оформление блока сортировки */
+
+.query-panel {
+    max-width: 70rem;
+    margin: 1rem auto 1.5rem;
+    padding: 1rem;
+    background: var(--color-filter-sort-panel);
+    border: 1px solid #ccc;
+    border-radius: 0.75rem;
+}
+
+.filter-fields {
+    margin-bottom: 0.75rem;
+    padding: 0;
+    border: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+legend {
+    text-align: center;
+    font-size: 1.5rem;
+    padding-bottom: 0.75rem;
+}
+
+.filter-field {
+    display: grid;
+    gap: 0.35rem;
+    font-weight: 600;
+}
+
+.filter-block {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+.filter-field input,
+.filter-field select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #888;
+    border-radius: 0.4rem;
+    font: inherit;
+    font-weight: 400;
+}
+
+.sort-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ccc;
+}
+
+/* Скрытие блока сортировки и фильтрации */
+
+.filter-panel {
+    max-width: 70rem;
+    margin: 1rem auto 1.5rem;
+}
+
+.filter-panel-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid #aaa;
+    border-radius: 0.5rem;
+    background-color: var(--color-filter-sort-panel);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+}
+
+.filter-panel-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.filter-panel-toggle::after {
+    content: "+";
+    font-size: 1.3rem;
+}
+
+.filter-panel[open] .filter-panel-toggle::after {
+    content: "−";
+}
+
+/* Блок навигации по странцам таблицы */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem auto;
+}
+
+#page-info {
+    font-weight: 600;
+    padding: 0.25em 0.7em;
+    background: var(--color-page-info-background);
+    border-radius: 0.5rem;
+}
+
+/* Общее оформление кнопок для всех страниц */
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    color: var(--color-button-font-default);
+    background-color: var(--color-button-default);
+    border: 1px solid black;
+    border-radius: 0.3125rem;
+    margin: 0.3125rem;
+    padding: 0.3125rem;
+}
+
+#delete-button {
+    background-color: var(--color-button-delete);
+}
+
+#accept-button {
+    background-color: var(--color-button-accept);
+}
+
+.buttons:disabled {
+    color: var(--color-button-font-disable);
+    background-color: var(--color-button-disable) !important;
+    cursor: not-allowed;
+}
+
+.buttons:not(:disabled) {
+    cursor: pointer;
+}
+
+/* Карточка студента в досье */
+
+.student-card {
+    background-color: var(--color-student-info-back);
+    width: calc(100% - 32px);
+    max-width: 60rem;
+    margin: 1.25rem auto;
+    border: 1px solid var(--color-student-info-border);
+    border-radius: 0.625rem;
+    padding: 1.25rem;
+}
+
+#student-full-name {
+    text-align: center;
+    margin-bottom: 1.25rem;
+    margin-top: 0;
+}
+
+.student-card dt {
+    font-weight: bold;
+    margin-bottom: 0.625rem;
+}
+
+.student-card dd {
+    margin-bottom: 1.25rem;
+}
+
+
+.info-row {
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+/* Оформление формы добавления студента */
+
+.form-row {
+    display: grid;
+    margin-bottom: 0.9375rem;
+    grid-template-columns: 25% 75%;
+    align-items: center;
+}
+
+.form-row label {
+    font-weight: 600;
+    min-width: 6.25rem;
+}
+
+.required {
+    color: red;
+}
+
+.student-card input,
+.student-card textarea {
+    width: 100%;
+    min-width: 0;
+    min-height: 1.875rem;
+}
+
+.student-info #notes {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+textarea {
+    resize: vertical;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* блок с ошибкой для всех страниц */
+
+.error-container {
+    width: fit-content;
+    max-width: min(90%, 40rem);
+    text-align: center;
+    margin: 1.25rem auto;
+    padding: 0.625rem 1rem;
+    background-color: var(--color-error-container);
+    border: 1px solid var(--color-error-container-border);
+    border-radius: 0.625rem;
+}
+
+#error-message {
+    margin: 0;
+    white-space: pre-line;
+}
+
+/* медиа запрос для адаптивности */
+
+@media (max-width: 600px) {
+    .form-row,
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 0.3125rem;
+    }
+}
+
+@media (min-width: 1920px) {
+    .student-card,
+    .table-container {
+        max-width: 90rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .sort-controls {
+        width: 100%;
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .sort-controls select {
+        width: 100%;
+    }
+}
+
