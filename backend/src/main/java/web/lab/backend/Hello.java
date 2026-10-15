@@ -1,4 +1,4 @@
-package org.lab.jakarta.hello;
+package web.lab.backend;
 
 public class Hello {
 

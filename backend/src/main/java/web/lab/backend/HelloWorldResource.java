@@ -1,4 +1,4 @@
-package org.lab.jakarta.hello;
+package web.lab.backend;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
