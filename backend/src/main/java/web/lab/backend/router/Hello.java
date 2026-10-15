@@ -1,4 +1,4 @@
-package web.lab.backend;
+package web.lab.backend.router;
 
 public class Hello {
 

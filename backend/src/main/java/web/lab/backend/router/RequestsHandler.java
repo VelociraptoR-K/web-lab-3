@@ -1,4 +1,4 @@
-package web.lab.backend;
+package web.lab.backend.router;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -6,8 +6,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/")
-public class HelloWorldResource {
+@Path("/requests")
+public class RequestsHandler {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
