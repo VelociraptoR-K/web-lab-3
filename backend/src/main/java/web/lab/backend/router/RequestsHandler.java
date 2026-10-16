@@ -1,21 +1,18 @@
 package web.lab.backend.router;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import web.lab.backend.dto.StudentInfoDTO;
 
 @Path("/requests")
 public class RequestsHandler {
 
-    @GET
+    @GET @Path("/{id}")
     @Produces({ MediaType.APPLICATION_JSON })
-    public Hello hello(@QueryParam("name") String name) {
-        if ((name == null) || name.trim().isEmpty()) {
-            name = "world";
-        }
+    public StudentInfoDTO getHandle(@PathParam("id") Integer id) {
 
-        return new Hello(name);
+        var response = new StudentInfoDTO();
+
+        return response;
     }
 }
