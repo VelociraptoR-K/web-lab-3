@@ -2,11 +2,16 @@ package web.lab.backend.dto;
 
 import java.time.LocalDate;
 
+import jakarta.json.bind.annotation.JsonbNillable;
 import jakarta.validation.constraints.*;
 import web.lab.backend.dto.validation.DateValidation;
 import web.lab.backend.dto.validation.NameValidation;
 
+@JsonbNillable
 public record StudentInfoDTO(
+
+    @NotNull
+    Long id,
 
     @NotBlank
     @NameValidation

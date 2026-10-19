@@ -2,11 +2,21 @@
 python3.12 -m http.server 2000
 
 
-### Запуск backend (из папки jakarta-base):  
+### Запуск backend: 
+```bash
+cd backend
+set -a
+source .env
+set +a
+./mvnw clean jooq-codegen:generate@generate-jooq
 ./mvnw wildfly:dev
+```
 
 WildFly отдельно запускать и скачивать не надо.  
 Он скачается и сам запустится благодаря Maven плагину
+
+БД PostgreSQL, скрипт для создания таблицы в папке `backend/database/init.sql`.   
+Чтобы код подключился к бд надо ее запустить и прописать данные в `.env` файл.
 
 ---
 
@@ -21,7 +31,7 @@ WildFly отдельно запускать и скачивать не надо.
 ### TODO:
 - ~~Настроить CORS~~
 - REST api перенести с FastAPI (делаем на JakartaEE)
-- создать и подключить бд (PostgreSQL)
+- ~~создать и подключить бд (PostgreSQL)~~
 - сделать репозиторий для связи с БД
 - сделать DTO и перенести валидацию (Bean Validation + написать пару своих аннотаций)
 - добавить фильтрацию\пагинацию
