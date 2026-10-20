@@ -48,15 +48,18 @@ public class RequestsHandler {
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StudentResponse createNew(@Valid CreateStudentDTO studentInfo) {
-        return studentService.createNew(studentInfo);
+    public Response createNew(@Valid CreateStudentDTO studentInfo) {
+        return Response.status(Response.Status.CREATED)
+                .entity(studentService.createNew(studentInfo))
+                .build();
     }
 
 
     @DELETE
     @Path("/{id}")
     public Response deleteById(@PathParam("id") Long id) {
-        return studentService.deleteById(id);
+        studentService.deleteById(id);
+        return Response.noContent().build();
     }
 
 

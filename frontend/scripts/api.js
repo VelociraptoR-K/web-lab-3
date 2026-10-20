@@ -1,4 +1,4 @@
-const apiRoute = "http://127.0.0.1:8080/"
+const apiRoute = "http://127.0.0.1:8080/api/requests/"
 // const apiRoute = "http://192.168.0.114:8080/api/requests/";
 
 async function errorHandler(response) {
@@ -56,8 +56,8 @@ export async function getAllStudentsFiltered(params) {
     const data = await response.json();
     return {
         students: data.students,
-        total_pages: data.total_pages,
-        studentsCount: data.students_count
+        total_pages: data.totalPages,
+        studentsCount: data.studentsCount
     }
 }
 
@@ -78,8 +78,8 @@ export async function getAllStudentsQuery(params) {
     const data = await response.json();
     return {
         students: data.students,
-        total_pages: data.total_pages,
-        studentsCount: data.students_count
+        total_pages: data.totalPages,
+        studentsCount: data.studentsCount
     }
 }
 

@@ -84,12 +84,8 @@ public class StudentService {
     }
 
 
-    public Response deleteById(Long id) {
+    public void deleteById(Long id) {
         int result = studentRepository.deleteStudent(id);
-        if (result == 1) {
-            return Response.noContent().build();
-        }
-        return Response.serverError().build();
     }
 
 

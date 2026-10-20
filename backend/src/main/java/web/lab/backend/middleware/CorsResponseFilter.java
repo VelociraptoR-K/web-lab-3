@@ -12,17 +12,10 @@ import  java.util.Set;
 
 
 @Provider
-@PreMatching
-public class CorsFilter implements ContainerResponseFilter, ContainerRequestFilter {
+
+public class CorsResponseFilter implements ContainerResponseFilter {
 
     private static final Set<String> ALLOWED_ORIGINS = Set.of("http://127.0.0.1:2000", "http://localhost:2000");
-
-    @Override
-    public void filter(ContainerRequestContext requestContext) {
-        if ("OPTIONS".equalsIgnoreCase(requestContext.getMethod())) {
-                requestContext.abortWith(Response.ok().build());
-        }
-    }
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
