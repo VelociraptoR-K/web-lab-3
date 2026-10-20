@@ -5,63 +5,68 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import web.lab.backend.dto.CreateStudentDTO;
-import web.lab.backend.dto.StudentInfoDTO;
-import web.lab.backend.dto.StudentPatchDTO;
-import web.lab.backend.repository.StudentRepository;
-
-import java.time.LocalDate;
-import java.util.List;
+import web.lab.backend.dto.*;
+import web.lab.backend.dto.response.StudentResponse;
+import web.lab.backend.dto.response.StudentsPage;
+import web.lab.backend.router.annotation.QUERY;
+import web.lab.backend.service.StudentService;
 
 @Path("/requests")
 public class RequestsHandler {
 
 
     @Inject
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
-    @GET @Path("")
-    @Produces( { MediaType.APPLICATION_JSON } )
-    public List<StudentInfoDTO> getAll() {
-        return studentRepository.getAllStudents();
+
+    @GET
+    @Path("")
+    @Produces({MediaType.APPLICATION_JSON})
+    public StudentsPage getAll(@BeanParam GetFilterDTO filterParams) {
+        var queryFilter = studentService.convertToQuery(filterParams);
+        return studentService.getAll(queryFilter);
     }
 
-    @GET @Path("/{id}")
-    @Produces( MediaType.APPLICATION_JSON )
-    public StudentInfoDTO getById(@PathParam("id") Long id) {
-        return studentRepository.getStudentById(id);
-    }
-
-    @POST @Path("")
-    @Consumes( MediaType.APPLICATION_JSON )
-    @Produces( MediaType.APPLICATION_JSON )
-    public StudentInfoDTO createNew(@Valid CreateStudentDTO studentInfo) {
-        return studentRepository.createStudent(studentInfo);
-    }
-
-    @DELETE @Path("/{id}")
-    public Response deleteById(@PathParam("id") Long id) {
-        int result = studentRepository.deleteStudent(id);
-        if (result != 1) {
-            return Response.status(Response.Status.NO_CONTENT).build();
-        }
-        return Response.noContent().build();
+    @QUERY
+    @Path("")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON})
+    public StudentsPage getAll(@Valid QueryFilterDTO filterParams) {
+        return studentService.getAll(filterParams);
     }
 
 
-    @PATCH @Path("/{id}")
-    @Consumes( MediaType.APPLICATION_JSON )
-    @Produces( MediaType.APPLICATION_JSON )
-    public StudentInfoDTO patchById(@PathParam("id") Long id, @Valid StudentPatchDTO patchInfo) {
-        studentRepository.editStudent(id, patchInfo);
-        return studentRepository.getStudentById(id);
-    }
-
-    /*@GET @Path("/database-check")
+    @GET
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean databaseCheck() {
-        return studentRepository.checkConnection();
-    }*/
+    public StudentResponse getById(@PathParam("id") Long id) {
+        return studentService.getById(id);
+    }
+
+
+    @POST
+    @Path("")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public StudentResponse createNew(@Valid CreateStudentDTO studentInfo) {
+        return studentService.createNew(studentInfo);
+    }
+
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteById(@PathParam("id") Long id) {
+        return studentService.deleteById(id);
+    }
+
+
+    @PATCH
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public StudentResponse patchById(@PathParam("id") Long id, @Valid StudentPatchDTO patchInfo) {
+        return studentService.patchById(id, patchInfo);
+    }
 
 
 }

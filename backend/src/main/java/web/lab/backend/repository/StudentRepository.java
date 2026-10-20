@@ -7,17 +7,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import static jooq.generated.tables.Students.STUDENTS;
 
 import jooq.generated.tables.records.StudentsRecord;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Records;
-import org.jooq.SQLDialect;
+import org.jooq.*;
 import org.jooq.impl.DSL;
-import web.lab.backend.dto.CreateStudentDTO;
-import web.lab.backend.dto.StudentInfoDTO;
-import web.lab.backend.dto.StudentPatchDTO;
+import web.lab.backend.dto.*;
 
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +32,106 @@ public class StudentRepository {
     }
 
 
-    public List<StudentInfoDTO> getAllStudents() {
+
+    private Condition buildConditions(QueryFilterDTO filterParams) {
+        List<Condition> conditions = new ArrayList<>();
+
+        if (filterParams.name() != null) {
+            conditions.add(STUDENTS.NAME.containsIgnoreCase(filterParams.name()));
+        }
+        if (filterParams.surname() != null) {
+            conditions.add(STUDENTS.SURNAME.containsIgnoreCase(filterParams.surname()));
+        }
+        if (filterParams.patronymic() != null) {
+            conditions.add(STUDENTS.PATRONYMIC.containsIgnoreCase(filterParams.patronymic()));
+        }
+
+        if (filterParams.group() != null && !filterParams.group().isEmpty()) {
+            conditions.add(STUDENTS.STUDENT_GROUP.in(filterParams.group()));
+        }
+        if (filterParams.dormitoryNumber() != null && !filterParams.dormitoryNumber().isEmpty()) {
+            conditions.add(STUDENTS.DORMITORY_NUMBER.in(filterParams.dormitoryNumber()));
+        }
+        if (filterParams.room() != null && !filterParams.room().isEmpty()) {
+            conditions.add(STUDENTS.ROOM.in(filterParams.room()));
+        }
+
+        if (filterParams.moveInDateFrom() != null) {
+            conditions.add(
+                    STUDENTS.MOVE_IN_DATE.between(
+                            filterParams.moveInDateFrom(),
+                            filterParams.moveInDateTo()
+                    )
+            );
+        }
+
+        if (filterParams.foreigner() != null) {
+            conditions.add(STUDENTS.FOREIGNER.eq(filterParams.foreigner()));
+        }
+
+        return DSL.and(conditions);
+    }
+
+    private SortField<?> buildSortField(QueryFilterDTO filterParams) {
+        Field<?> field = switch (filterParams.sortBy()) {
+            case id -> STUDENTS.ID;
+            case name -> STUDENTS.NAME;
+            case surname -> STUDENTS.SURNAME;
+            case patronymic -> STUDENTS.PATRONYMIC;
+            case group -> STUDENTS.STUDENT_GROUP;
+            case isuId -> STUDENTS.ISU_ID;
+            case dormitoryNumber -> STUDENTS.DORMITORY_NUMBER;
+            case room -> STUDENTS.ROOM;
+            case moveInDate -> STUDENTS.MOVE_IN_DATE;
+            case foreigner -> STUDENTS.FOREIGNER;
+        };
+
+        return filterParams.order() == SortByDirections.up
+                ? field.asc()
+                : field.desc();
+    }
+
+    private int calculateOffset(QueryFilterDTO filterParams) {
+        return (filterParams.page() - 1) * filterParams.limit();
+    }
+
+
+    public int countStudents(QueryFilterDTO filterParams) {
+        Condition filterCondition = buildConditions(filterParams);
+
+        return dsl.fetchCount(
+                dsl.selectFrom(STUDENTS)
+                        .where(filterCondition)
+        );
+    }
+
+
+    public List<StudentInfoDTO> getAllStudents(QueryFilterDTO filterParams) {
+        Condition filterCondition = buildConditions(filterParams);
+        SortField<?> sortField = buildSortField(filterParams);
+
+        if (filterParams.limit() == null) {
+            return dsl.select(
+                            STUDENTS.ID,
+                            STUDENTS.NAME,
+                            STUDENTS.SURNAME,
+                            STUDENTS.PATRONYMIC,
+                            STUDENTS.STUDENT_GROUP,
+                            STUDENTS.ISU_ID,
+                            STUDENTS.DORMITORY_NUMBER,
+                            STUDENTS.ROOM,
+                            STUDENTS.MOVE_IN_DATE,
+                            STUDENTS.FOREIGNER,
+                            STUDENTS.NOTES
+                    )
+                    .from(STUDENTS)
+                    .where(filterCondition)
+                    .orderBy(sortField)
+                    .fetch(Records.mapping(StudentInfoDTO::new));
+        }
+
+        int offset = calculateOffset(filterParams);
+
         return dsl.select(
                         STUDENTS.ID,
                         STUDENTS.NAME,
@@ -51,6 +146,10 @@ public class StudentRepository {
                         STUDENTS.NOTES
                 )
                 .from(STUDENTS)
+                .where(filterCondition)
+                .orderBy(sortField)
+                .limit(filterParams.limit())
+                .offset(offset)
                 .fetch(Records.mapping(StudentInfoDTO::new));
     }
 
@@ -128,16 +227,36 @@ public class StudentRepository {
     public int editStudent(Long id, StudentPatchDTO patchInfo) {
         Map<Field<?>, Object> values = new LinkedHashMap<>();
 
-        if (patchInfo.getName() != null) { values.put(STUDENTS.NAME, patchInfo.getName()); }
-        if (patchInfo.getSurname() != null) { values.put(STUDENTS.SURNAME, patchInfo.getSurname()); }
-        if (patchInfo.isPatronymicProvided()) { values.put(STUDENTS.PATRONYMIC, patchInfo.getPatronymic()); }
-        if (patchInfo.getGroup() != null) { values.put(STUDENTS.STUDENT_GROUP, patchInfo.getGroup()); }
-        if (patchInfo.getIsuId() != null) { values.put(STUDENTS.ISU_ID, patchInfo.getIsuId()); }
-        if (patchInfo.isDormitoryNumberProvided()) {values.put(STUDENTS.DORMITORY_NUMBER, patchInfo.getDormitoryNumber()); }
-        if (patchInfo.isRoomProvided()) {values.put(STUDENTS.ROOM, patchInfo.getRoom()); }
-        if (patchInfo.isMoveInDateProvided()) {values.put(STUDENTS.MOVE_IN_DATE, patchInfo.getMoveInDate()); }
-        if (patchInfo.getForeigner() != null) { values.put(STUDENTS.FOREIGNER, patchInfo.getForeigner()); }
-        if (patchInfo.isNotesProvided()) {values.put(STUDENTS.NOTES, patchInfo.getNotes()); }
+        if (patchInfo.getName() != null) {
+            values.put(STUDENTS.NAME, patchInfo.getName());
+        }
+        if (patchInfo.getSurname() != null) {
+            values.put(STUDENTS.SURNAME, patchInfo.getSurname());
+        }
+        if (patchInfo.isPatronymicProvided()) {
+            values.put(STUDENTS.PATRONYMIC, patchInfo.getPatronymic());
+        }
+        if (patchInfo.getGroup() != null) {
+            values.put(STUDENTS.STUDENT_GROUP, patchInfo.getGroup());
+        }
+        if (patchInfo.getIsuId() != null) {
+            values.put(STUDENTS.ISU_ID, patchInfo.getIsuId());
+        }
+        if (patchInfo.isDormitoryNumberProvided()) {
+            values.put(STUDENTS.DORMITORY_NUMBER, patchInfo.getDormitoryNumber());
+        }
+        if (patchInfo.isRoomProvided()) {
+            values.put(STUDENTS.ROOM, patchInfo.getRoom());
+        }
+        if (patchInfo.isMoveInDateProvided()) {
+            values.put(STUDENTS.MOVE_IN_DATE, patchInfo.getMoveInDate());
+        }
+        if (patchInfo.getForeigner() != null) {
+            values.put(STUDENTS.FOREIGNER, patchInfo.getForeigner());
+        }
+        if (patchInfo.isNotesProvided()) {
+            values.put(STUDENTS.NOTES, patchInfo.getNotes());
+        }
 
         if (values.isEmpty()) {
             return 0;
@@ -150,16 +269,4 @@ public class StudentRepository {
     }
 }
 
-
-
-    /*public boolean checkConnection() {
-        try {
-            Connection connection = dataSource.getConnection();
-            PreparedStatement state = connection.prepareStatement("SELECT 1");
-            state.execute();
-            return true;
-        } catch (SQLException e) {
-            return false;
-        }
-    }*/
 

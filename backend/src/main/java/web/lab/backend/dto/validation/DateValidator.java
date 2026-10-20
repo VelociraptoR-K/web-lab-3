@@ -15,6 +15,6 @@ public class DateValidator implements ConstraintValidator<DateValidation, LocalD
             return true;
         }
 
-        return value.isAfter(LocalDate.of(2000, 1, 1));
+        return !value.isBefore(LocalDate.of(2000, 1, 1));
     }
 }

@@ -12,8 +12,8 @@ public class GetFilterDTO {
     private String name;
     private String surname;
     private String patronymic;
-    private String group;
     private String isuId;
+    private String group;
     @QueryParam("dormitoryNumber")
     private Integer dormitoryNumber;
     @QueryParam("room")
@@ -24,7 +24,6 @@ public class GetFilterDTO {
     private LocalDate moveInDateTo;
     @QueryParam("foreigner")
     private Boolean foreigner;
-    private String notes;
 
     @QueryParam("sortBy")
     @DefaultValue("id")
@@ -71,15 +70,6 @@ public class GetFilterDTO {
         this.patronymic = trim(patronymic);
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    @QueryParam("group")
-    public void setGroup(String group) {
-        this.group = trim(group);
-    }
-
     public String getIsuId() {
         return isuId;
     }
@@ -88,6 +78,13 @@ public class GetFilterDTO {
     public void setIsuId(String isuId) {
         this.isuId = trim(isuId);
     }
+
+    public String getGroup() {
+        return group;
+    }
+
+    @QueryParam("group")
+    public void setGroup(String group) { this.group = trim(group); }
 
     public Integer getDormitoryNumber() {
         return dormitoryNumber;
@@ -127,15 +124,6 @@ public class GetFilterDTO {
 
     public void setForeigner(Boolean foreigner) {
         this.foreigner = foreigner;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    @QueryParam("notes")
-    public void setNotes(String notes) {
-        this.notes = trim(notes);
     }
 
     public SortByValues getSortBy() {

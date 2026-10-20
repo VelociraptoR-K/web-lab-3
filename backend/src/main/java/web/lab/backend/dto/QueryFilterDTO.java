@@ -1,5 +1,7 @@
 package web.lab.backend.dto;
 
+import jakarta.ws.rs.BadRequestException;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -17,7 +19,6 @@ public record QueryFilterDTO(
         LocalDate moveInDateFrom,
         LocalDate moveInDateTo,
         Boolean foreigner,
-        String notes,
 
         SortByValues sortBy,
         SortByDirections order,
@@ -35,9 +36,33 @@ public record QueryFilterDTO(
         surname = trim(surname);
         patronymic = trim(patronymic);
         isuId = trim(isuId);
-        notes = trim(notes);
 
         sortBy = sortBy == null ? SortByValues.id : sortBy;
         order = order == null ? SortByDirections.up : order;
+
+        if (limit != null && page == null) {
+            page = 1;
+        }
+
+        if (page != null && page < 1) {
+            throw new BadRequestException("page must be at least 1");
+        }
+
+        if (limit != null && limit < 1) {
+            throw new BadRequestException("limit must be at least 1");
+        }
+
+        if (moveInDateFrom == null ^ moveInDateTo == null) {
+            throw new BadRequestException(
+                    "moveInDateFrom and moveInDateTo must be specified together"
+            );
+        }
+
+        if (moveInDateFrom != null
+                && moveInDateFrom.isAfter(moveInDateTo)) {
+            throw new BadRequestException(
+                    "moveInDateFrom must not be later than moveInDateTo"
+            );
+        }
     }
 }
