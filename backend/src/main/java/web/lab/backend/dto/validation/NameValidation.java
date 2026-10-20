@@ -16,9 +16,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = NameValidator.class)
 public @interface NameValidation {
+
     String message() default "Allowed only letters, space and '–'";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
 }

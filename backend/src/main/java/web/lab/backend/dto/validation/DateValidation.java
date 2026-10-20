@@ -16,9 +16,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = DateValidator.class)
 public @interface DateValidation {
+
     String message() default "Date should be later than 2000-01-01";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
 }

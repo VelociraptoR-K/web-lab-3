@@ -85,7 +85,7 @@ public class StudentService {
 
 
     public void deleteById(Long id) {
-        int result = studentRepository.deleteStudent(id);
+        studentRepository.deleteStudent(id);
     }
 
 

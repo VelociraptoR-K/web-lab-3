@@ -1,12 +1,15 @@
 package web.lab.backend.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.QueryParam;
+import web.lab.backend.dto.validation.DateRangeValidation;
 import web.lab.backend.dto.validation.DateValidation;
 
 import java.time.LocalDate;
 
-public class GetFilterDTO {
+@DateRangeValidation
+public class GetFilterDTO implements DateRangeValidatable {
 
 
     private String name;
@@ -33,8 +36,10 @@ public class GetFilterDTO {
     private SortByDirections order;
 
     @QueryParam("page")
+    @Min(value = 1, message = "Page must be at least 1")
     private Integer page;
     @QueryParam("limit")
+    @Min(value = 1, message = "Limit must be at least 1")
     private Integer limit;
 
 

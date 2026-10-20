@@ -22,7 +22,7 @@ public class RequestsHandler {
     @GET
     @Path("")
     @Produces({MediaType.APPLICATION_JSON})
-    public StudentsPage getAll(@BeanParam GetFilterDTO filterParams) {
+    public StudentsPage getAll(@Valid @BeanParam GetFilterDTO filterParams) {
         var queryFilter = studentService.convertToQuery(filterParams);
         return studentService.getAll(queryFilter);
     }

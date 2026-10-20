@@ -4,6 +4,6 @@ import java.util.List;
 
 public record ErrorResponse(
     String message,
-    List<?> details
+    List<ErrorDetail> details
 ) {
 }

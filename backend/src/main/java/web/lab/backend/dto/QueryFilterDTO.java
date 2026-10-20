@@ -1,10 +1,13 @@
 package web.lab.backend.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.BadRequestException;
+import web.lab.backend.dto.validation.DateRangeValidation;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@DateRangeValidation
 public record QueryFilterDTO(
 
         String name,
@@ -23,10 +26,12 @@ public record QueryFilterDTO(
         SortByValues sortBy,
         SortByDirections order,
 
+        @Min(value = 1, message = "Page must be at least 1")
         Integer page,
+        @Min(value = 1, message = "Limit must be at least 1")
         Integer limit
 
-) {
+) implements DateRangeValidatable {
     private static String trim(String value) {
         return value == null ? null : value.trim();
     }
@@ -43,26 +48,15 @@ public record QueryFilterDTO(
         if (limit != null && page == null) {
             page = 1;
         }
+    }
 
-        if (page != null && page < 1) {
-            throw new BadRequestException("page must be at least 1");
-        }
+    @Override
+    public LocalDate getMoveInDateFrom() {
+        return moveInDateFrom;
+    }
 
-        if (limit != null && limit < 1) {
-            throw new BadRequestException("limit must be at least 1");
-        }
-
-        if (moveInDateFrom == null ^ moveInDateTo == null) {
-            throw new BadRequestException(
-                    "moveInDateFrom and moveInDateTo must be specified together"
-            );
-        }
-
-        if (moveInDateFrom != null
-                && moveInDateFrom.isAfter(moveInDateTo)) {
-            throw new BadRequestException(
-                    "moveInDateFrom must not be later than moveInDateTo"
-            );
-        }
+    @Override
+    public LocalDate getMoveInDateTo() {
+        return moveInDateTo;
     }
 }

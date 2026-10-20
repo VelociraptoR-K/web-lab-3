@@ -9,33 +9,33 @@ import java.time.LocalDate;
 public class StudentPatchDTO {
 
     @NameValidation
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 50, message = "Length must be from 2 to 50 symbols")
     private String name;
 
     @NameValidation
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 50, message = "Length must be from 2 to 50 symbols")
     private String surname;
 
     @NameValidation
-    @Size(max = 50)
+    @Size(max = 50, message = "Length must be up to 50 symbols")
     private String patronymic;
 
-    @Pattern(regexp = "^[A-Z]\\d{4}$")
+    @Pattern(regexp = "^[A-Z]\\d{4}$", message = "Parameter must match the pattern")
     private String group;
 
-    @Pattern(regexp = "^[1-9]\\d{5}$")
+    @Pattern(regexp = "^[1-9]\\d{5}$", message = "Parameter must match the pattern")
     private String isuId;
 
-    @Min(1)
-    @Max(100)
+    @Min(value = 1, message = "Value must be greater than 1")
+    @Max(value = 100, message = "Value must be less than 100")
     private Integer dormitoryNumber;
 
-    @Min(1)
-    @Max(1000)
+    @Min(value = 1, message = "Value must be greater than 1")
+    @Max(value = 1000, message = "Value must be less than 1000")
     private Integer room;
 
     @DateValidation
-    @PastOrPresent
+    @PastOrPresent(message = "Date must be from 2000-01-01 to current date")
     private LocalDate moveInDate;
 
     private Boolean foreigner;

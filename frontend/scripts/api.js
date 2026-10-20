@@ -20,9 +20,7 @@ async function errorHandler(response) {
             let details = [];
             if (Array.isArray(data?.details)) {
                 details = data.details.map(error => {
-                    const field = error.field?.split(".").at(-1);
-                    const fieldName = fieldNames[field] ?? field ?? "Данные";
-                    return `${fieldName}: ${error.message}`;
+                    return `${fieldNames[error.fieldName]}: ${error.message}`;
                 })
             }
 

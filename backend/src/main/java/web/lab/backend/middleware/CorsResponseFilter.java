@@ -22,9 +22,9 @@ public class CorsResponseFilter implements ContainerResponseFilter {
         String origin = requestContext.getHeaderString("Origin");
 
         if (origin != null && ALLOWED_ORIGINS.contains(origin)) {
-            responseContext.getHeaders().add("Access-Control-Allow-Origin", origin);
-            responseContext.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, QUERY, OPTIONS");
-            responseContext.getHeaders().add("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", origin);
+            responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, QUERY, OPTIONS");
+            responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization");
         }
     }
 }
