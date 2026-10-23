@@ -1,22 +1,26 @@
-CREATE TABLE students (
-                          id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
 
-                          name VARCHAR(50) NOT NULL,
-                          surname VARCHAR(50) NOT NULL,
-                          patronymic VARCHAR(50),
+CREATE TABLE students
+(
+    id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-                          student_group VARCHAR(5) NOT NULL,
-                          isu_id VARCHAR(6) NOT NULL UNIQUE,
+    name             VARCHAR(50) NOT NULL,
+    surname          VARCHAR(50) NOT NULL,
+    patronymic       VARCHAR(50),
 
-                          dormitory_number INT,
-                          room INT,
-                          move_in_date DATE,
+    student_group    VARCHAR(5)  NOT NULL,
+    isu_id           VARCHAR(6)  NOT NULL UNIQUE,
 
-                          foreigner BOOLEAN NOT NULL,
-                          notes TEXT,
+    dormitory_number INT,
+    room             INT,
+    move_in_date     DATE,
 
-                          CONSTRAINT students_group_format
-                              CHECK (student_group ~ '^[A-Z][0-9]{4}$'),
+    foreigner        BOOLEAN     NOT NULL,
+    notes            TEXT,
+
+    CONSTRAINT students_group_format
+        CHECK (student_group ~ '^[A-Z][0-9]{4}$'
+) ,
 
     CONSTRAINT students_isu_id_format
         CHECK (isu_id ~ '^[1-9][0-9]{5}$'),
@@ -32,27 +36,25 @@ CREATE TABLE students (
 );
 
 
-CREATE TABLE users (
-                       id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-                       username VARCHAR(50) NOT NULL UNIQUE,
-                       email VARCHAR(255) NOT NULL UNIQUE,
-                       password_hash VARCHAR(255) NOT NULL,
-                       role VARCHAR(10) NOT NULL,
-
-                       CONSTRAINT users_role_valid
-                           CHECK (role IN ('USER', 'ADMIN'))
+CREATE TABLE users
+(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username      VARCHAR(50)  NOT NULL UNIQUE,
+    email         VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role          user_role    NOT NULL
 );
 
 
 
-CREATE TABLE refresh_tokens (
-                                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+CREATE TABLE refresh_tokens
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 
-                                user_id BIGINT NOT NULL
-                                    REFERENCES users(id)
-                                        ON DELETE CASCADE,
+    user_id    BIGINT       NOT NULL
+        REFERENCES users (id)
+            ON DELETE CASCADE,
 
-                                token_hash VARCHAR(255) NOT NULL UNIQUE,
-                                expires_at TIMESTAMPTZ NOT NULL
+    token_hash VARCHAR(255) NOT NULL UNIQUE,
+    expires_at TIMESTAMPTZ  NOT NULL
 );

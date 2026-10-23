@@ -44,7 +44,7 @@ public class UserRepository {
                             username,
                             email,
                             hashedPassword,
-                            role.name())
+                            jooq.generated.enums.UserRole.valueOf(role.name()))
                     .returning(
                             USERS.ID)
                     .fetchOne();
@@ -82,7 +82,7 @@ public class UserRepository {
                         record.get(USERS.USERNAME),
                         record.get(USERS.EMAIL),
                         record.get(USERS.PASSWORD_HASH),
-                        UserRole.valueOf(record.get(USERS.ROLE))
+                        UserRole.valueOf(record.get(USERS.ROLE).getLiteral())
                 ));
 
         if (user == null) {
@@ -107,7 +107,7 @@ public class UserRepository {
                         record.get(USERS.USERNAME),
                         record.get(USERS.EMAIL),
                         record.get(USERS.PASSWORD_HASH),
-                        UserRole.valueOf(record.get(USERS.ROLE))
+                        UserRole.valueOf(record.get(USERS.ROLE).getLiteral())
                 ));
 
         return Optional.ofNullable(user);
