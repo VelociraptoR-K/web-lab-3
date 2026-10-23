@@ -23,4 +23,16 @@
     <security-role>
         <role-name>ADMIN</role-name>
     </security-role>
+
+
+
+    <mime-mapping>
+        <extension>json</extension>
+        <mime-type>application/json</mime-type>
+    </mime-mapping>
+
+    <error-page>
+        <error-code>401</error-code>
+        <location>/WEB-INF/errors/401.json</location>
+    </error-page>
 </web-app>
