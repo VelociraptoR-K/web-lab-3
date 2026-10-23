@@ -2,13 +2,11 @@ package web.lab.backend.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.core.Response;
-import web.lab.backend.dto.*;
 import web.lab.backend.dto.response.StudentResponse;
 import web.lab.backend.dto.response.StudentsPage;
+import web.lab.backend.dto.students.*;
 import web.lab.backend.repository.StudentRepository;
 
-import java.util.Collections;
 import java.util.List;
 
 

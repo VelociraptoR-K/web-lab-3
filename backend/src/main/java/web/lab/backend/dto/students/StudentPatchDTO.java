@@ -1,4 +1,4 @@
-package web.lab.backend.dto;
+package web.lab.backend.dto.students;
 
 import jakarta.validation.constraints.*;
 import web.lab.backend.dto.validation.DateValidation;

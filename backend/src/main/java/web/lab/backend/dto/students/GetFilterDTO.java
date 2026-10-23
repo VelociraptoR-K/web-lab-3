@@ -1,10 +1,9 @@
-package web.lab.backend.dto;
+package web.lab.backend.dto.students;
 
 import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.QueryParam;
 import web.lab.backend.dto.validation.DateRangeValidation;
-import web.lab.backend.dto.validation.DateValidation;
 
 import java.time.LocalDate;
 

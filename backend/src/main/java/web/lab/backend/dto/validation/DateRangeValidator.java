@@ -2,7 +2,7 @@ package web.lab.backend.dto.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import web.lab.backend.dto.DateRangeValidatable;
+import web.lab.backend.dto.students.DateRangeValidatable;
 
 import java.time.LocalDate;
 

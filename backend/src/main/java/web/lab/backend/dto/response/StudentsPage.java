@@ -1,6 +1,6 @@
 package web.lab.backend.dto.response;
 
-import web.lab.backend.dto.StudentInfoDTO;
+import web.lab.backend.dto.students.StudentInfoDTO;
 
 import java.util.List;
 

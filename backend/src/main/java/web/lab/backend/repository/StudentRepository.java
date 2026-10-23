@@ -14,7 +14,7 @@ import jooq.generated.tables.records.StudentsRecord;
 import org.jooq.*;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
-import web.lab.backend.dto.*;
+import web.lab.backend.dto.students.*;
 
 
 import javax.sql.DataSource;

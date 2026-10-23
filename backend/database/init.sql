@@ -30,3 +30,29 @@ CREATE TABLE students (
     CONSTRAINT students_move_in_date_min
         CHECK (move_in_date >= DATE '2000-01-01')
 );
+
+
+CREATE TABLE users (
+                       id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                       username VARCHAR(50) NOT NULL UNIQUE,
+                       email VARCHAR(255) NOT NULL UNIQUE,
+                       password_hash VARCHAR(255) NOT NULL,
+                       role VARCHAR(10) NOT NULL,
+
+                       CONSTRAINT users_role_valid
+                           CHECK (role IN ('USER', 'ADMIN'))
+);
+
+
+
+CREATE TABLE refresh_tokens (
+                                id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+                                user_id BIGINT NOT NULL
+                                    REFERENCES users(id)
+                                        ON DELETE CASCADE,
+
+                                token_hash VARCHAR(255) NOT NULL UNIQUE,
+                                expires_at TIMESTAMPTZ NOT NULL
+);
