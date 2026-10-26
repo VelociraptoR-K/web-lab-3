@@ -33,6 +33,10 @@ body {
     font-size: 1.125rem;
 }
 
+header {
+    position: relative;
+}
+
 button,
 input,
 textarea,
@@ -343,6 +347,55 @@ textarea {
     white-space: pre-line;
 }
 
+.user-menu {
+    position: absolute;
+    top: 0;
+    right: 1rem;
+    z-index: 10;
+}
+
+.user-menu summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 15rem;
+    padding: 0.5rem;
+    background-color: var(--color-filter-sort-panel);
+    border: 1px solid var(--color-student-info-border);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.user-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+#menu-username {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-menu-actions {
+    position: absolute;
+    right: 0;
+    min-width: 12rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--color-student-info-back);
+    border: 1px solid var(--color-student-info-border);
+    border-radius: 0.5rem;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.user-menu-actions .buttons {
+    width: calc(100% - 0.625rem);
+}
+
 /* медиа запрос для адаптивности */
 
 @media (max-width: 600px) {
@@ -369,6 +422,16 @@ textarea {
 
     .sort-controls select {
         width: 100%;
+    }
+}
+
+@media (max-width: 1000px) {
+    .user-menu {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: fit-content;
+        margin: 0 1rem 1rem auto;
     }
 }
 

@@ -120,8 +120,8 @@ public class SecurityService {
     }
 
     @Transactional
-    public TokenPairResponse refreshTokens(RefreshRequest request) {
-        String oldTokenHash = hashRefreshToken(request.refreshToken());
+    public TokenPairResponse refreshTokens(String token) {
+        String oldTokenHash = hashRefreshToken(token);
 
         Long userId = refreshTokenRepository.deleteByHash(oldTokenHash).orElseThrow(() -> new ClientErrorException("Refresh-токен недействителен или срок его действия истёк", Response.Status.UNAUTHORIZED));
 
@@ -135,10 +135,22 @@ public class SecurityService {
         return new TokenPairResponse(accessToken, refreshToken);
     }
 
-    public void deleteToken(RefreshRequest request) {
-        String oldTokenHash = hashRefreshToken(request.refreshToken());
+    public void deleteToken(String token) {
+        String oldTokenHash = hashRefreshToken(token);
 
         refreshTokenRepository.deleteByHash(oldTokenHash);
+    }
+
+
+    public UserResponse getCurrentUser(Long id) {
+        UserDTO user = userRepository.findUserById(id);
+
+        return new UserResponse(
+                user.id(),
+                user.username(),
+                user.email(),
+                user.userRole()
+        );
     }
 
 }

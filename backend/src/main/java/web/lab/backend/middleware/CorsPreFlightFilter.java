@@ -44,6 +44,8 @@ public class CorsPreFlightFilter implements ContainerRequestFilter {
                                 "Access-Control-Allow-Headers",
                                 "Content-Type, Authorization"
                         )
+                        .header("Access-Control-Allow-Credentials", "true")
+                        .header("Vary", "Origin")
                         .build()
         );
     }

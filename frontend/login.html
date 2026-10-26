@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в аккаунт</title>
+    <link href="style.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+</head>
+<body>
+<header>
+    <h1>Вход в аккаунт</h1>
+</header>
+
+<main>
+    <div class="error-container" role="alert" hidden>
+        <p id="error-message"></p>
+    </div>
+
+    <form id="login-form" class="student-card">
+        <div class="form-row">
+            <label for="username">
+                Имя пользователя <span class="required">*</span>
+            </label>
+            <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    autocomplete="username"
+                    placeholder="Введите имя пользователя"
+                    minlength="3"
+                    maxlength="20"
+                    pattern="[a-zA-Z0-9]{3,20}"
+                    title="От 3 до 20 символов: латинские буквы и цифры"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+            >
+        </div>
+
+        <div class="form-row">
+            <label for="password">
+                Пароль <span class="required">*</span>
+            </label>
+            <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    autocomplete="current-password"
+                    placeholder="Введите пароль"
+                    required
+            >
+        </div>
+
+        <div class="buttons-container">
+            <button
+                    type="submit"
+                    class="buttons"
+                    id="accept-button"
+            >
+                Войти
+            </button>
+
+            <a href="register.html" class="buttons">
+                Зарегистрироваться
+            </a>
+        </div>
+    </form>
+</main>
+
+<script type="module" src="scripts/login.js"></script>
+</body>
+</html>

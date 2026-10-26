@@ -1,48 +1,13 @@
+import { errorHandler } from "./errors.js";
+import { apiFetch } from "./apiWrapper.js";
+
 const apiRoute = "http://127.0.0.1:8080/api/requests/"
 // const apiRoute = "http://192.168.0.114:8080/api/requests/";
-
-async function errorHandler(response) {
-    const data = await response.json().catch(() => null);
-
-    switch (response.status) {
-        case 422:
-            const fieldNames = {
-                patronymic: "Отчество",
-                name: "Имя",
-                surname: "Фамилия",
-                group: "Группа",
-                isuId: "ИСУ ID",
-                dormitoryNumber: "Номер общежития",
-                room: "Комната",
-                moveInDate: "Дата заселения"
-            };
-
-            let details = [];
-            if (Array.isArray(data?.details)) {
-                details = data.details.map(error => {
-                    return `${fieldNames[error.fieldName]}: ${error.message}`;
-                })
-            }
-
-            const message = data?.message ?? `Произошла ошибка (${response.status})`;
-            throw new Error([message, ...details].join("\n"));
-        case 409:
-            throw new Error(`Ошибка конфликта данных (409):\n${data.message}`);
-        case 404:
-            throw new Error(`Ошибка не найдено (404):\n${data.message}`);
-        case 400:
-            throw new Error(`Ошибка при запросе (400):\n${data.message}`);
-        case 500:
-            throw new Error(`Ошибка на сервере (500):\n${data.message}`);
-        default:
-            throw new Error(`Произошла ошибка (${response.status})`);
-    }
-}
 
 export async function getAllStudentsFiltered(params) {
     let response;
     try{
-        response = await fetch(apiRoute + "?" + params);
+        response = await apiFetch(apiRoute + "?" + params);
     } catch(error) {
         throw new Error(`Ошибка при запросе к API`);
     }
@@ -62,7 +27,7 @@ export async function getAllStudentsFiltered(params) {
 export async function getAllStudentsQuery(params) {
     let response;
     try {
-        response = await fetch(apiRoute, {
+        response = await apiFetch(apiRoute, {
             method: "QUERY",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(params),
@@ -84,7 +49,7 @@ export async function getAllStudentsQuery(params) {
 export async function getStudentById(id) {
     let response;
     try {
-        response = await fetch(apiRoute + id);
+        response = await apiFetch(apiRoute + id);
     } catch(error) {
         throw new Error(`Ошибка при запросе к API`);
     }  
@@ -99,7 +64,7 @@ export async function getStudentById(id) {
 export async function createStudent(student) {
     let response;
     try{
-        response = await fetch(apiRoute, {
+        response = await apiFetch(apiRoute, {
             method: "POST",
             body: JSON.stringify(student),
             headers: {
@@ -118,7 +83,7 @@ export async function createStudent(student) {
 export async function editStudent(id, changedFields) {
     let response;
     try {
-        response = await fetch(apiRoute + id, {
+        response = await apiFetch(apiRoute + id, {
             method: "PATCH",
             body: JSON.stringify(changedFields),
             headers: {
@@ -137,7 +102,7 @@ export async function editStudent(id, changedFields) {
 export async function deleteStudent(id) {
     let response;
     try {
-        response = await fetch(apiRoute + id, {
+        response = await apiFetch(apiRoute + id, {
             method: "DELETE"
         });
     } catch(error) {

@@ -10,6 +10,19 @@
 <body>
     <header>
         <h1>Форма управления студентами</h1>
+        <details id="user-menu" class="user-menu" hidden>
+            <summary>
+                <span aria-hidden="true">👤</span>
+                <span id="menu-username"></span>
+            </summary>
+
+            <nav class="user-menu-actions" aria-label="Меню пользователя">
+                <a href="profile.html" class="buttons">Мой профиль</a>
+                <button type="button" class="buttons" id="logout-button">
+                    Выйти
+                </button>
+            </nav>
+        </details>
     </header>
     <main>
         <div class="error-container" hidden>
@@ -57,11 +70,12 @@
                 <textarea id="notes" name="notes"></textarea>
             </div>
             <div class="buttons-container">
-                <button type="submit" class="buttons" id="accept-button">Добавить студента</button>
-                <a href="index.html" class="buttons" id="delete-button">Отменить изменения</a>
+                <button type="submit" class="buttons" id="accept-button" data-admin-only hidden>Добавить студента</button>
+                <a href="index.html" class="buttons" id="delete-button" data-admin-only hidden>Отменить изменения</a>
             </div>
         </form>
     </main>
     <script type="module" src="scripts/form.js"></script>
+    <script type="module" src="scripts/userMenu.js"></script>
 </body>
 </html>
