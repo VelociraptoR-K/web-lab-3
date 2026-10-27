@@ -46,6 +46,12 @@
             <artifactId>java-jwt</artifactId>
             <version>4.6.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.microprofile.openapi</groupId>
+            <artifactId>microprofile-openapi-api</artifactId>
+            <version>4.0.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -73,6 +79,7 @@
                         <version>41.0.0.Final</version>
                         <addOns>
                             <addOn>postgresql:default</addOn>
+                            <addOn>openapi</addOn>
                         </addOns>
                     </discover-provisioning-info>
                 </configuration>

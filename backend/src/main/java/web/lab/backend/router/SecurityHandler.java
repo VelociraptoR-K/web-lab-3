@@ -10,6 +10,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import web.lab.backend.dto.auth.LoginRequest;
 import web.lab.backend.dto.auth.RefreshRequest;
 import web.lab.backend.dto.auth.RegisterRequest;
@@ -44,6 +48,14 @@ public class SecurityHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
+    @APIResponse(
+            responseCode = "201",
+            description = "Пользователь зарегистрирован",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = UserResponse.class)
+            )
+    )
     public Response register(@NotNull @Valid RegisterRequest request) {
         UserResponse user = securityService.registerUser(request);
         return Response.status(Response.Status.CREATED).entity(user).build();
@@ -55,6 +67,14 @@ public class SecurityHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
+    @APIResponse(
+            responseCode = "200",
+            description = "Access-токен. Refresh-токен устанавливается в HttpOnly cookie.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = AccessTokenResponse.class)
+            )
+    )
     public Response login(@NotNull @Valid LoginRequest request) {
         TokenPairResponse newTokens = securityService.loginUser(request);
 
@@ -69,6 +89,14 @@ public class SecurityHandler {
     @Path("/refresh")
     @Produces(MediaType.APPLICATION_JSON)
     @PermitAll
+    @APIResponse(
+            responseCode = "200",
+            description = "Access-токен. Refresh-токен устанавливается в HttpOnly cookie.",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = AccessTokenResponse.class)
+            )
+    )
     public Response refresh(@CookieParam("refreshToken") String refreshToken) {
         if (refreshToken == null || refreshToken.isBlank()) {
             throw new ClientErrorException("Refresh-токен отсутствует", 401);
@@ -86,6 +114,10 @@ public class SecurityHandler {
     @POST
     @Path("/logout")
     @PermitAll
+    @APIResponse(
+            responseCode = "204",
+            description = "Выход выполнен, refresh-cookie удалена"
+    )
     public Response logout(@CookieParam("refreshToken") String refreshToken) {
         if (refreshToken != null && !refreshToken.isBlank()) {
             securityService.deleteToken(refreshToken);
@@ -100,6 +132,7 @@ public class SecurityHandler {
     @Path("/me")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"USER", "ADMIN"})
+    @SecurityRequirement(name = "bearerAuth")
     public UserResponse me() {
         Long userId = Long.valueOf(jwt.getSubject());
         return securityService.getCurrentUser(userId);

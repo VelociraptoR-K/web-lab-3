@@ -6,6 +6,10 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import web.lab.backend.dto.response.StudentResponse;
 import web.lab.backend.dto.response.StudentsPage;
 import web.lab.backend.dto.students.CreateStudentDTO;
@@ -16,6 +20,7 @@ import web.lab.backend.router.annotation.QUERY;
 import web.lab.backend.service.StudentService;
 
 @Path("/requests")
+@SecurityRequirement(name = "bearerAuth")
 public class RequestsHandler {
 
 
@@ -56,6 +61,14 @@ public class RequestsHandler {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("ADMIN")
+    @APIResponse(
+            responseCode = "201",
+            description = "Студент создан",
+            content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON,
+                    schema = @Schema(implementation = StudentResponse.class)
+            )
+    )
     public Response createNew(@Valid CreateStudentDTO studentInfo) {
         return Response.status(Response.Status.CREATED)
                 .entity(studentService.createNew(studentInfo))
@@ -66,6 +79,10 @@ public class RequestsHandler {
     @DELETE
     @Path("/{id}")
     @RolesAllowed("ADMIN")
+    @APIResponse(
+            responseCode = "204",
+            description = "Студент удалён"
+    )
     public Response deleteById(@PathParam("id") Long id) {
         studentService.deleteById(id);
         return Response.noContent().build();
