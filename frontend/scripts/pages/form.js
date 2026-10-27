@@ -1,5 +1,5 @@
-import { getStudentById, createStudent, editStudent } from "./api.js";
-import { showError } from "./errors.js";
+import { getStudentById, createStudent, editStudent } from "../api/api.js";
+import { showError } from "../shared/errors.js";
 
 console.log("form.js loaded");
 

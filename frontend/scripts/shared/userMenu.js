@@ -1,4 +1,4 @@
-import { logout, getCurrentUser } from "./auth.js";
+import { logout, getCurrentUser } from "../api/auth.js";
 import { showError } from "./errors.js";
 
 const menu = document.getElementById("user-menu");

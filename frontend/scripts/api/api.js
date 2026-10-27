@@ -1,7 +1,7 @@
-import { errorHandler } from "./errors.js";
+import { errorHandler } from "../shared/errors.js";
 import { apiFetch } from "./apiWrapper.js";
 
-const apiRoute = "http://127.0.0.1:8080/api/requests/"
+const apiRoute = "http://localhost:8080/api/requests/"
 // const apiRoute = "http://192.168.0.114:8080/api/requests/";
 
 export async function getAllStudentsFiltered(params) {

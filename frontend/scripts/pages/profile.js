@@ -1,5 +1,5 @@
-import { logout, getCurrentUser } from "./auth.js";
-import { showError } from "./errors.js";
+import { logout, getCurrentUser } from "../api/auth.js";
+import { showError } from "../shared/errors.js";
 
 const profileCard = document.getElementById("profile-card");
 const username = document.getElementById("profile-username");

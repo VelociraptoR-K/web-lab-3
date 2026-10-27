@@ -1,5 +1,5 @@
-import { getAllStudentsFiltered, getAllStudentsQuery, deleteStudent } from "./api.js"
-import { showError } from "./errors.js";
+import { getAllStudentsFiltered, getAllStudentsQuery, deleteStudent } from "../api/api.js"
+import { showError } from "../shared/errors.js";
 
 console.log('index.js loaded');
 
