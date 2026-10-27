@@ -1,5 +1,8 @@
 package web.lab.backend.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import web.lab.backend.dto.response.StudentResponse;
@@ -12,6 +15,8 @@ import java.util.List;
 
 @ApplicationScoped
 public class StudentService {
+    
+    private static final Logger log = LoggerFactory.getLogger(StudentService.class);
 
     @Inject
     StudentRepository studentRepository;
@@ -41,6 +46,7 @@ public class StudentService {
 
 
     public StudentsPage getAll(QueryFilterDTO filterParams) {
+        log.info("Бизнес-логика: Запрос на получение списка студентов с фильтрами.");
         List<StudentInfoDTO> students = studentRepository.getAllStudents(filterParams);
 
         int studentsCount = studentRepository.countStudents(filterParams);
@@ -64,6 +70,7 @@ public class StudentService {
 
 
     public StudentResponse getById(Long id) {
+        log.info("Бизнес-логика: Поиск студента по ID: {}", id);
         StudentInfoDTO studentInfo = studentRepository.getStudentById(id);
         return new StudentResponse(
                 String.format("Student with id=%d", id),
@@ -73,6 +80,7 @@ public class StudentService {
     }
 
     public StudentResponse createNew(CreateStudentDTO createInfo) {
+        log.info("Бизнес-логика: Создание нового студента.");
         StudentInfoDTO studentInfo = studentRepository.createStudent(createInfo);
         return new StudentResponse(
                 "Student was added succesfully",
@@ -83,11 +91,13 @@ public class StudentService {
 
 
     public void deleteById(Long id) {
+        log.info("Бизнес-логика: Удаление студента с ID: {}", id);
         studentRepository.deleteStudent(id);
     }
 
 
     public StudentResponse patchById(Long id, StudentPatchDTO patchInfo) {
+        log.info("Бизнес-логика: Частичное обновление данных студента с ID: {}", id);
         studentRepository.editStudent(id, patchInfo);
         StudentInfoDTO studentInfo = studentRepository.getStudentById(id);
         return new StudentResponse(
