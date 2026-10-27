@@ -1,5 +1,5 @@
-import { getStudentById } from "./api.js";
-import { showError } from "./errors.js";
+import { getStudentById } from "../api/api.js";
+import { showError } from "../shared/errors.js";
 
 console.log("student.js loaded");
 

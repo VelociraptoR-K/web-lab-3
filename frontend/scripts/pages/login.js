@@ -1,5 +1,5 @@
-import { login } from "./auth.js";
-import { showError } from "./errors.js";
+import { login } from "../api/auth.js";
+import { showError } from "../shared/errors.js";
 
 const form = document.getElementById("login-form");
 const submitButton = form.querySelector('button[type="submit"]');

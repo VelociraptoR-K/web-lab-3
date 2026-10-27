@@ -108,7 +108,7 @@
                 <configuration>
                     <jdbc>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:5432/${env.POSTGRESQL_DATABASE}</url>
+                        <url>${env.POSTGRESQL_URL}</url>
                         <user>${env.POSTGRESQL_USER}</user>
                         <password>${env.POSTGRESQL_PASSWORD}</password>
                     </jdbc>

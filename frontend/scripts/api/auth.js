@@ -1,7 +1,7 @@
 import { apiFetch } from "./apiWrapper.js";
-import { errorHandler } from "./errors.js";
+import { errorHandler } from "../shared/errors.js";
 
-const authUrl = "http://127.0.0.1:8080/api/auth";
+const authUrl = "http://localhost:8080/api/auth";
 
 let accessToken = null;
 

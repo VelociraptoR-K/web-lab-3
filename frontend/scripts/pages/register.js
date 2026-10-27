@@ -1,5 +1,5 @@
-import { register, login } from "./auth.js";
-import { showError } from "./errors.js";
+import { register, login } from "../api/auth.js";
+import { showError } from "../shared/errors.js";
 
 const form = document.getElementById("register-form");
 const password = document.getElementById("password");
