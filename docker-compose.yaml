@@ -26,12 +26,14 @@ services:
       POSTGRESQL_URL: jdbc:postgresql://db:5432/${POSTGRESQL_DATABASE}
       JWT_SECRET_KEY_LOCATION: file:/app/secrets/jwt-secret.jwk
     volumes:
+      - maven-cache:/root/.m2
       - ./backend/secrets/jwt-secret.jwk:/app/secrets/jwt-secret.jwk:ro
     ports:
       - "8080:8080"
     depends_on:
       db:
         condition: service_healthy
+
 
   frontend:
     build: ./frontend
@@ -40,3 +42,4 @@ services:
 
 volumes:
   postgres-data:
+  maven-cache:
