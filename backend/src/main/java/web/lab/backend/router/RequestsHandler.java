@@ -1,5 +1,6 @@
 package web.lab.backend.router;
 
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,7 @@ public class RequestsHandler {
     @RolesAllowed({"USER", "ADMIN"})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    public StudentsPage getAll(@Valid QueryFilterDTO filterParams) {
+    public StudentsPage getAll(@NotNull @Valid QueryFilterDTO filterParams) {
         log.info("Получен HTTP-запрос QUERY на получение отфильтрованного списка студентов.");
         return studentService.getAll(filterParams);
     }
@@ -76,7 +77,7 @@ public class RequestsHandler {
                     schema = @Schema(implementation = StudentResponse.class)
             )
     )
-    public Response createNew(@Valid CreateStudentDTO studentInfo) {
+    public Response createNew(@NotNull @Valid CreateStudentDTO studentInfo) {
         log.info("Получен HTTP-запрос POST на создание нового студента.");
         return Response.status(Response.Status.CREATED)
                 .entity(studentService.createNew(studentInfo))
@@ -103,7 +104,7 @@ public class RequestsHandler {
     @RolesAllowed("ADMIN")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StudentResponse patchById(@PathParam("id") Long id, @Valid StudentPatchDTO patchInfo) {
+    public StudentResponse patchById(@PathParam("id") Long id, @NotNull @Valid StudentPatchDTO patchInfo) {
         log.info("Получен HTTP-запрос PATCH на частичное обновление данных студента с ID: {}", id);
         return studentService.patchById(id, patchInfo);
     }

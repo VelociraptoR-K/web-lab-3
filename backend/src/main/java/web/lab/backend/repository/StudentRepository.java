@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import static jooq.generated.tables.Students.STUDENTS;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.NotFoundException;
@@ -26,16 +27,8 @@ import java.util.Map;
 @ApplicationScoped
 public class StudentRepository {
 
-    @Resource(lookup = "java:jboss/datasources/Lab3DataSource")
-    private DataSource dataSource;
-
+    @Inject
     private DSLContext dsl;
-
-    @PostConstruct
-    private void init() {
-        dsl = DSL.using(dataSource, SQLDialect.POSTGRES);
-    }
-
 
 
     private Condition buildConditions(QueryFilterDTO filterParams) {
@@ -112,7 +105,6 @@ public class StudentRepository {
         );
     }
 
-
     public List<StudentInfoDTO> getAllStudents(QueryFilterDTO filterParams) {
         Condition filterCondition = buildConditions(filterParams);
         SortField<?> sortField = buildSortField(filterParams);
@@ -160,7 +152,6 @@ public class StudentRepository {
                 .fetch(Records.mapping(StudentInfoDTO::new));
     }
 
-
     public StudentInfoDTO getStudentById(Long id) {
         StudentInfoDTO student =  dsl.select(
                         STUDENTS.ID,
@@ -185,7 +176,6 @@ public class StudentRepository {
 
         return student;
     }
-
 
     public StudentInfoDTO createStudent(CreateStudentDTO studentInfo) {
         try {
@@ -239,7 +229,6 @@ public class StudentRepository {
         }
     }
 
-
     public void deleteStudent(Long id) {
         int result = dsl.deleteFrom(STUDENTS)
                 .where(STUDENTS.ID.eq(id))
@@ -248,7 +237,6 @@ public class StudentRepository {
             throw new NotFoundException("Student with id=" + id + " was not found");
         }
     }
-
 
     public void editStudent(Long id, StudentPatchDTO patchInfo) {
         try {

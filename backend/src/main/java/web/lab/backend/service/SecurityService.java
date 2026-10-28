@@ -22,6 +22,7 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HexFormat;
@@ -44,10 +45,13 @@ public class SecurityService {
 
 
     @PostConstruct
-    void initPasswordHash() {
-        String secretBase64Url = System.getenv("JWT_SECRET_BASE64URL");
+    void init() {
+        configurePasswordHash();
+        configureJwt();
+    }
 
-        passwordHash.initialize(Map.of("Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256", "Pbkdf2PasswordHash.Iterations", "600000", "Pbkdf2PasswordHash.SaltSizeBytes", "16", "Pbkdf2PasswordHash.KeySizeBytes", "32"));
+    private void configureJwt() {
+        String secretBase64Url = System.getenv("JWT_SECRET_BASE64URL");
 
         if (secretBase64Url == null || secretBase64Url.isBlank()) {
             throw new IllegalStateException("JWT_SECRET_BASE64URL is not configured");
@@ -62,11 +66,33 @@ public class SecurityService {
         jwtAlgorithm = Algorithm.HMAC256(secretBytes);
     }
 
+    private void configurePasswordHash() {
+        passwordHash.initialize(Map.of(
+                "Pbkdf2PasswordHash.Algorithm", "PBKDF2WithHmacSHA256",
+                "Pbkdf2PasswordHash.Iterations", "600000",
+                "Pbkdf2PasswordHash.SaltSizeBytes", "16",
+                "Pbkdf2PasswordHash.KeySizeBytes", "32"
+        ));
+
+    }
+
+
+
+
 
     public String generateAccessToken(UserDTO user) {
         Instant now = Instant.now();
 
-        return JWT.create().withIssuer("lab3").withSubject(user.id().toString()).withClaim("upn", user.username()).withArrayClaim("groups", new String[]{user.userRole().name()}).withIssuedAt(Date.from(now)).withExpiresAt(Date.from(now.plusSeconds(900))).sign(jwtAlgorithm);
+        return JWT.create()
+                .withIssuer("lab3")
+                .withSubject(
+                        user.id().toString())
+                .withClaim("upn", user.username())
+                .withArrayClaim("groups",
+                        new String[]{user.userRole().name()})
+                .withIssuedAt(Date.from(now))
+                .withExpiresAt(Date.from(now.plus(15, ChronoUnit.MINUTES)))
+                .sign(jwtAlgorithm);
     }
 
     private String generateRefreshToken() {
@@ -95,6 +121,8 @@ public class SecurityService {
     private boolean passwordMatches(String rawPassword, String storedHash) {
         return passwordHash.verify(rawPassword.toCharArray(), storedHash);
     }
+
+
 
 
     public UserResponse registerUser(RegisterRequest request) {

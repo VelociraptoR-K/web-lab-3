@@ -1,5 +1,6 @@
 package web.lab.backend.service;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,6 +97,7 @@ public class StudentService {
     }
 
 
+    @Transactional
     public StudentResponse patchById(Long id, StudentPatchDTO patchInfo) {
         log.info("Бизнес-логика: Частичное обновление данных студента с ID: {}", id);
         studentRepository.editStudent(id, patchInfo);

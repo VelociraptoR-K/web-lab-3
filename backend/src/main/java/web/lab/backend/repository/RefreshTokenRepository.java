@@ -5,6 +5,7 @@ import static jooq.generated.tables.RefreshTokens.REFRESH_TOKENS;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.core.Response;
@@ -24,15 +25,8 @@ import java.util.Optional;
 @ApplicationScoped
 public class RefreshTokenRepository {
 
-    @Resource(lookup = "java:jboss/datasources/Lab3DataSource")
-    private DataSource dataSource;
-
+    @Inject
     private DSLContext dsl;
-
-    @PostConstruct
-    private void init() {
-        dsl = DSL.using(dataSource, SQLDialect.POSTGRES);
-    }
 
     public RefreshTokenDTO createRefreshToken(Long userId, String hashedToken, OffsetDateTime expiresAt) {
         var newRefreshToken = dsl.insertInto(REFRESH_TOKENS,
